@@ -143,7 +143,7 @@ func (orm *Model) Find(output interface{}) error {
 	var keys []string
 	results, _ := scanStructIntoMap(output)
 	if orm.TableName == "" {
-		orm.TableName = snakeCasedName(StructName(output))
+		orm.TableName = pluralizeString(snakeCasedName(StructName(output)))
 	}
 	for key, _ := range results {
 		keys = append(keys, key)
@@ -357,7 +357,7 @@ func (orm *Model) Save(output interface{}) error {
 	orm.ScanPK(output)
 	results, _ := scanStructIntoMap(output)
 	if orm.TableName == "" {
-		orm.TableName = snakeCasedName(StructName(output))
+		orm.TableName = pluralizeString(snakeCasedName(StructName(output)))
 	}
 	id := results[snakeCasedName(orm.PrimaryKey)]
 	delete(results, snakeCasedName(orm.PrimaryKey))
@@ -515,7 +515,7 @@ func (orm *Model) Delete(output interface{}) (int64, error) {
 	orm.ScanPK(output)
 	results, _ := scanStructIntoMap(output)
 	if orm.TableName == "" {
-		orm.TableName = snakeCasedName(StructName(output))
+		orm.TableName = pluralizeString(snakeCasedName(StructName(output)))
 	}
 	id := results[strings.ToLower(orm.PrimaryKey)]
 	condition := fmt.Sprintf("%v%v%v='%v'", orm.QuoteIdentifier, strings.ToLower(orm.PrimaryKey), orm.QuoteIdentifier, id)
